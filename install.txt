@@ -1,0 +1,3 @@
+pip3 install pipreqs
+pip3 install pip-tools
+python3 -m pipreqs.pipreqs --savepath=requirements.txt && pip-compile
