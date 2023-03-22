@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from .models import Image
 from .forms import ImageUploadForm
+from models import evaluate
+import numpy as np
 ALLOW_FILE_TYPES = ['jpg', 'jpeg', 'png']
 
 class ImageUploadView(APIView):
@@ -28,6 +30,9 @@ class ImageUploadView(APIView):
             if form.is_valid():
                 file_img = Image(Image=request.FILES['file'])
                 file_img.save()
+                result = evaluate.run_example(file.name)
+                result = np.argmax(result, axis=-1)
+                print(result)
                 return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
             
