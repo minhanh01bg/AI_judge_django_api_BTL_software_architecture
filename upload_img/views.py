@@ -33,7 +33,8 @@ class ImageUploadView(APIView):
                 result = evaluate.run_example(file.name)
                 result = np.argmax(result, axis=-1)
                 print(result)
-                return Response(status=status.HTTP_201_CREATED)
+                # return Response(status=status.HTTP_201_CREATED)
+                return Response(result)
         return Response(status=status.HTTP_400_BAD_REQUEST)
             
             
