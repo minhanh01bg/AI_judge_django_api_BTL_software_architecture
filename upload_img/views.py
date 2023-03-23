@@ -9,12 +9,24 @@ from .models import Image
 from .forms import ImageUploadForm
 from models import evaluate
 import numpy as np
+from drf_yasg import openapi
+from rest_framework.parsers import MultiPartParser
+from drf_yasg.utils import swagger_auto_schema
 ALLOW_FILE_TYPES = ['jpg', 'jpeg', 'png']
 
 class ImageUploadView(APIView):
+    parser_classes = (MultiPartParser,)
+    @swagger_auto_schema(operation_description='Upload attack file...',
+                         manual_parameters=[openapi.Parameter(
+                             name="file",
+                             in_=openapi.IN_FORM,
+                             type=openapi.TYPE_FILE,
+                             required=True,
+                             description="files"
+                         )])
     def post(ig, request):
-        ig.upload_file(request)
-        return Response(status=status.HTTP_201_CREATED)
+        # ig.upload_file(request)
+        return ig.upload_file(request)
     
     def upload_file(ig,request):
         if request.method == 'POST':
@@ -39,8 +51,8 @@ class ImageUploadView(APIView):
                 print(result)
                 # return Response(status=status.HTTP_201_CREATED)
                 print(labels[result[0]])
-    
-                return JsonResponse({'result': labels[result[0]]})
+                
+                return Response(labels[result[0]])
         return Response(status=status.HTTP_400_BAD_REQUEST)
             
             
